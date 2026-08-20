@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getAllIssues } from "../api/issues";
+import ReportIssue from "./ReportIssue";
 
 function Dashboard() {
     const { user, logoutUser } = useAuth();
     const [issues, setIssues] = useState([]);
     const [error, setError] = useState("");
+    const [showReportIssue, setShowReportIssue] = useState(false);
 
     useEffect(() => {
         getAllIssues()
             .then((data) => setIssues(data.filter((i) => i.reporterName === user.name)))
             .catch((err) => setError(err.message));
-    }, []);
+    }, [showReportIssue]);
+
+    if (showReportIssue) {
+        return <ReportIssue onBack={() => setShowReportIssue(false)} />;
+    }
 
     return (
         <div>
@@ -24,6 +30,7 @@ function Dashboard() {
                 gap: 16,
             }}>
                 <h2 style={{ margin: 0 }}>Welcome, {user.name}</h2>
+                <button onClick={() => setShowReportIssue(true)}>Report New Issue</button>
                 <button onClick={logoutUser} style={{ marginLeft: "auto" }}>Log out</button>
             </div>
 
