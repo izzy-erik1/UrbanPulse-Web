@@ -1,9 +1,18 @@
+import { useAuth } from "./context/AuthContext";
+import Login from "./pages/Login";
+
 function App() {
-  return (
-      <div>
-        <h1>UrbanPulse</h1>
-      </div>
-  );
+    const { user } = useAuth();
+
+    if (!user) {
+        return <Login />;
+    }
+
+    return (
+        <div>
+            <h1>Welcome, {user.name}</h1>
+        </div>
+    );
 }
 
 export default App;
