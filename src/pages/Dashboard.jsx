@@ -2,21 +2,27 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getAllIssues } from "../api/issues";
 import ReportIssue from "./ReportIssue";
+import IssueDetail from "./IssueDetail";
 
 function Dashboard() {
     const { user, logoutUser } = useAuth();
     const [issues, setIssues] = useState([]);
     const [error, setError] = useState("");
     const [showReportIssue, setShowReportIssue] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState(null);
 
     useEffect(() => {
         getAllIssues()
             .then((data) => setIssues(data.filter((i) => i.reporterName === user.name)))
             .catch((err) => setError(err.message));
-    }, [showReportIssue]);
+    }, [showReportIssue, selectedIssue]);
 
     if (showReportIssue) {
         return <ReportIssue onBack={() => setShowReportIssue(false)} />;
+    }
+
+    if (selectedIssue) {
+        return <IssueDetail issue={selectedIssue} onBack={() => setSelectedIssue(null)} />;
     }
 
     return (
@@ -40,7 +46,11 @@ function Dashboard() {
                 {issues.length === 0 && !error && <p>No issues reported yet.</p>}
                 <ul>
                     {issues.map((issue) => (
-                        <li key={issue.id}>
+                        <li
+                            key={issue.id}
+                            onClick={() => setSelectedIssue(issue)}
+                            style={{ cursor: "pointer", textDecoration: "underline", marginBottom: 6 }}
+                        >
                             [{issue.status}] {issue.title}
                         </li>
                     ))}
