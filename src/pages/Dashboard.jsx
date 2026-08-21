@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { getAllIssues } from "../api/issues";
 import ReportIssue from "./ReportIssue";
 import IssueDetail from "./IssueDetail";
+import Admin from "./Admin";
 
 function Dashboard() {
     const { user, logoutUser } = useAuth();
@@ -10,12 +11,15 @@ function Dashboard() {
     const [error, setError] = useState("");
     const [showReportIssue, setShowReportIssue] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
+    const [showAdmin, setShowAdmin] = useState(false);
+
+    const isStaffOrAdmin = user.role === "ADMIN" || user.role === "MUNICIPALITY_STAFF";
 
     useEffect(() => {
         getAllIssues()
             .then((data) => setIssues(data.filter((i) => i.reporterName === user.name)))
             .catch((err) => setError(err.message));
-    }, [showReportIssue, selectedIssue]);
+    }, [showReportIssue, selectedIssue, showAdmin]);
 
     if (showReportIssue) {
         return <ReportIssue onBack={() => setShowReportIssue(false)} />;
@@ -23,6 +27,10 @@ function Dashboard() {
 
     if (selectedIssue) {
         return <IssueDetail issue={selectedIssue} onBack={() => setSelectedIssue(null)} />;
+    }
+
+    if (showAdmin) {
+        return <Admin onBack={() => setShowAdmin(false)} />;
     }
 
     return (
@@ -37,6 +45,9 @@ function Dashboard() {
             }}>
                 <h2 style={{ margin: 0 }}>Welcome, {user.name}</h2>
                 <button onClick={() => setShowReportIssue(true)}>Report New Issue</button>
+                {isStaffOrAdmin && (
+                    <button onClick={() => setShowAdmin(true)}>Admin Panel</button>
+                )}
                 <button onClick={logoutUser} style={{ marginLeft: "auto" }}>Log out</button>
             </div>
 
