@@ -29,7 +29,7 @@ function IssueDetail({ issue, onBack }) {
     }
 
     return (
-        <div style={{ maxWidth: 600, margin: "40px auto", padding: 24 }}>
+        <div className="card-wide">
             <h2>{issue.title}</h2>
             <p><strong>Status:</strong> {issue.status}</p>
             <p><strong>Priority:</strong> {issue.priority}</p>
@@ -40,7 +40,7 @@ function IssueDetail({ issue, onBack }) {
             <hr style={{ margin: "20px 0" }} />
 
             <h3>Comments</h3>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p className="error-text">{error}</p>}
             <ul>
                 {comments.map((c) => (
                     <li key={c.id}>

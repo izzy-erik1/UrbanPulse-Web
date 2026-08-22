@@ -22,9 +22,9 @@ function Register({ onSuccess }) {
     }
 
     return (
-        <div style={{ maxWidth: 360, margin: "60px auto" }}>
+        <div className="card">
             <h2>UrbanPulse Register</h2>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Full name"
@@ -49,10 +49,10 @@ function Register({ onSuccess }) {
                     <option value="ADMIN">Admin</option>
                 </select>
                 <button type="submit">Register</button>
-                {message && <p style={{ color: "green" }}>{message}</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {message && <p className="success-text">{message}</p>}
+                {error && <p className="error-text">{error}</p>}
             </form>
-            <button onClick={onSuccess} style={{ marginTop: 10 }}>
+            <button onClick={onSuccess} className="link-button" style={{ marginTop: 10 }}>
                 Already have an account? Login
             </button>
         </div>

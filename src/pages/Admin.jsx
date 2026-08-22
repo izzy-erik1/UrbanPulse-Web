@@ -31,14 +31,14 @@ function Admin({ onBack }) {
     }
 
     return (
-        <div style={{ maxWidth: 700, margin: "40px auto", padding: 24 }}>
+        <div className="card-wide">
             <h2>Admin Dashboard</h2>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {message && <p style={{ color: "green" }}>{message}</p>}
+            {error && <p className="error-text">{error}</p>}
+            {message && <p className="success-text">{message}</p>}
 
-            <ul style={{ listStyle: "none", padding: 0 }}>
+            <ul>
                 {issues.map((issue) => (
-                    <li key={issue.id} style={{ marginBottom: 12, borderBottom: "1px solid #ddd", paddingBottom: 8 }}>
+                    <li key={issue.id}>
                         <div>
                             #{issue.id} [{issue.status}] {issue.title} ({issue.municipalityName})
                         </div>

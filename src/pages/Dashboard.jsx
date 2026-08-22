@@ -35,14 +35,7 @@ function Dashboard() {
 
     return (
         <div>
-            <div style={{
-                backgroundColor: "#2c3e50",
-                color: "white",
-                padding: "16px 24px",
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-            }}>
+            <div className="top-bar">
                 <h2 style={{ margin: 0 }}>Welcome, {user.name}</h2>
                 <button onClick={() => setShowReportIssue(true)}>Report New Issue</button>
                 {isStaffOrAdmin && (
@@ -53,14 +46,14 @@ function Dashboard() {
 
             <div style={{ padding: 24 }}>
                 <h3>My Reported Issues</h3>
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {error && <p className="error-text">{error}</p>}
                 {issues.length === 0 && !error && <p>No issues reported yet.</p>}
                 <ul>
                     {issues.map((issue) => (
                         <li
                             key={issue.id}
                             onClick={() => setSelectedIssue(issue)}
-                            style={{ cursor: "pointer", textDecoration: "underline", marginBottom: 6 }}
+                            style={{ cursor: "pointer" }}
                         >
                             [{issue.status}] {issue.title}
                         </li>

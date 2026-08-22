@@ -33,9 +33,9 @@ function ReportIssue({ onBack }) {
     }
 
     return (
-        <div style={{ maxWidth: 500, margin: "40px auto", padding: 24 }}>
+        <div className="card-wide">
             <h2>Report New Issue</h2>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Issue title"
@@ -67,8 +67,8 @@ function ReportIssue({ onBack }) {
                     ))}
                 </select>
                 <button type="submit">Submit Issue</button>
-                {message && <p style={{ color: "green" }}>{message}</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {message && <p className="success-text">{message}</p>}
+                {error && <p className="error-text">{error}</p>}
             </form>
             <button onClick={onBack} style={{ marginTop: 10 }}>Back to Dashboard</button>
         </div>

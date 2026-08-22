@@ -20,9 +20,9 @@ function Login({ onRegisterClick }) {
     }
 
     return (
-        <div style={{ maxWidth: 360, margin: "60px auto" }}>
+        <div className="card">
             <h2>UrbanPulse Login</h2>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="email"
                     placeholder="Email"
@@ -36,11 +36,11 @@ function Login({ onRegisterClick }) {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type="submit">Login</button>
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                <button onClick={onRegisterClick} style={{ marginTop: 10 }}>
-                    Don't have an account? Register
-                </button>
+                {error && <p className="error-text">{error}</p>}
             </form>
+            <button onClick={onRegisterClick} className="link-button" style={{ marginTop: 10 }}>
+                Don't have an account? Register
+            </button>
         </div>
     );
 }
