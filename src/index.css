@@ -8,6 +8,7 @@ body {
   font-family: "Segoe UI", sans-serif;
   background: linear-gradient(to bottom right, #eef2f5, #dfe7ec);
   min-height: 100vh;
+  color: #2c3e50;
 }
 
 .card {
@@ -28,7 +29,7 @@ body {
   margin: 40px auto;
 }
 
-h2 {
+h2, h3 {
   color: #2c3e50;
   margin-bottom: 16px;
 }
@@ -45,6 +46,8 @@ input, textarea, select {
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
+  background: white;
+  color: #2c3e50;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -113,4 +116,5 @@ li {
   border-radius: 6px;
   margin-bottom: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  color: #2c3e50;
 }
