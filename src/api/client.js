@@ -23,7 +23,13 @@ async function request(path, options = {}) {
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(errorText || `Request failed with status ${response.status}`);
+        let message = errorText;
+        try {
+            message = JSON.parse(errorText).message || errorText;
+        } catch {
+            // not JSON (e.g. the plain-text 401 from the JWT filter), keep the raw text
+        }
+        throw new Error(message || `Request failed with status ${response.status}`);
     }
 
     if (response.status === 204) {
