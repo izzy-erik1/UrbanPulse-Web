@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getAllIssues } from "../api/issues";
+import { getUnreadNotifications, markNotificationAsRead } from "../api/notifications";
 import ReportIssue from "./ReportIssue";
 import IssueDetail from "./IssueDetail";
 import Admin from "./Admin";
@@ -8,6 +9,7 @@ import Admin from "./Admin";
 function Dashboard() {
     const { user, logoutUser } = useAuth();
     const [issues, setIssues] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const [error, setError] = useState("");
     const [showReportIssue, setShowReportIssue] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
@@ -15,46 +17,57 @@ function Dashboard() {
 
     const isStaffOrAdmin = user.role === "ADMIN" || user.role === "MUNICIPALITY_STAFF";
 
+    function loadNotifications() {
+        getUnreadNotifications().then(setNotifications).catch(() => {});
+    }
+
     useEffect(() => {
         getAllIssues()
             .then((data) => setIssues(data.filter((i) => i.reporterName === user.name)))
             .catch((err) => setError(err.message));
+        loadNotifications();
     }, [showReportIssue, selectedIssue, showAdmin]);
 
-    if (showReportIssue) {
-        return <ReportIssue onBack={() => setShowReportIssue(false)} />;
+    async function handleMarkRead(id) {
+        await markNotificationAsRead(id);
+        loadNotifications();
     }
 
-    if (selectedIssue) {
-        return <IssueDetail issue={selectedIssue} onBack={() => setSelectedIssue(null)} />;
-    }
-
-    if (showAdmin) {
-        return <Admin onBack={() => setShowAdmin(false)} />;
-    }
+    if (showReportIssue) return <ReportIssue onBack={() => setShowReportIssue(false)} />;
+    if (selectedIssue) return <IssueDetail issue={selectedIssue} onBack={() => setSelectedIssue(null)} />;
+    if (showAdmin) return <Admin onBack={() => setShowAdmin(false)} />;
 
     return (
         <div>
             <div className="top-bar">
                 <h2 style={{ margin: 0 }}>Welcome, {user.name}</h2>
+                <span>{notifications.length} unread</span>
                 <button onClick={() => setShowReportIssue(true)}>Report New Issue</button>
-                {isStaffOrAdmin && (
-                    <button onClick={() => setShowAdmin(true)}>Admin Panel</button>
-                )}
+                {isStaffOrAdmin && <button onClick={() => setShowAdmin(true)}>Admin Panel</button>}
                 <button onClick={logoutUser} style={{ marginLeft: "auto" }}>Log out</button>
             </div>
 
             <div style={{ padding: 24 }}>
+                {notifications.length > 0 && (
+                    <>
+                        <h3>Notifications</h3>
+                        <ul>
+                            {notifications.map((n) => (
+                                <li key={n.id}>
+                                    {n.message}{" "}
+                                    <button onClick={() => handleMarkRead(n.id)} style={{ marginLeft: 10 }}>Mark read</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+
                 <h3>My Reported Issues</h3>
                 {error && <p className="error-text">{error}</p>}
                 {issues.length === 0 && !error && <p>No issues reported yet.</p>}
                 <ul>
                     {issues.map((issue) => (
-                        <li
-                            key={issue.id}
-                            onClick={() => setSelectedIssue(issue)}
-                            style={{ cursor: "pointer" }}
-                        >
+                        <li key={issue.id} onClick={() => setSelectedIssue(issue)} style={{ cursor: "pointer" }}>
                             [{issue.status}] {issue.title}
                         </li>
                     ))}
